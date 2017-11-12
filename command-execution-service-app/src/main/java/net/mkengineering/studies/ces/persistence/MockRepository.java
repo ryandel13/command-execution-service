@@ -6,16 +6,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import net.mkengineering.studies.ces.Command;
 import net.mkengineering.studies.ces.exceptions.CommandToOldException;
+import net.mkengineering.studies.ces.feign.CommunicationServiceFeign;
+import net.mkengineering.studies.cms.Message;
 
 @Component
 @ConditionalOnProperty(name="repository.location", havingValue="memory")
 public class MockRepository implements CommandRepository {
 
+	@Autowired
+	CommunicationServiceFeign cmsInterface;
+	
 	Map<String, Map<Long, CommandEntity>> repository = new HashMap<>();
 	
 	@Override
@@ -69,6 +75,13 @@ public class MockRepository implements CommandRepository {
 		}
 		
 		repository.get(vin).put(ce.getTimestamp(), ce);
+		
+		Message msg = new Message();
+		msg.setVin(vin);
+		msg.setTimestamp(ce.getTimestamp());
+		msg.setContent(command.getName() + "|" + command.getUser() + "|" + command.getCommandId());
+		
+		cmsInterface.sendCommand(vin, msg);
 		
 		return ce.getId();
 	}
