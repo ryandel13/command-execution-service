@@ -15,7 +15,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.7.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -75,6 +75,11 @@
 			<groupId>net.mkengineering.studies.cms</groupId>
 			<artifactId>communication-message-service-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>net.mkengineering.studies.ui</groupId>
+			<artifactId>ui-service-api</artifactId>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
