@@ -7,7 +7,7 @@ public class Command {
 
 	private String name;
 	
-	private Long commandId;
+	private String commandId;
 	
 	private String user;
 	

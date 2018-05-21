@@ -1,5 +1,7 @@
 package net.mkengineering.studies.ces.persistence;
 
+import java.util.UUID;
+
 import lombok.Data;
 import net.mkengineering.studies.ces.Command;
 
@@ -18,6 +20,10 @@ public class CommandEntity {
 	
 	private CommandState state;
 	
+	public CommandEntity() {
+		id = UUID.randomUUID().toString();
+	}
+	
 	public static CommandEntity createFromCommand(Command cmd) {
 		CommandEntity ce = new CommandEntity();
 		ce.setVin(cmd.getVin());
@@ -29,4 +35,15 @@ public class CommandEntity {
 		return ce;
 	}
 
+	
+	public Command toCommand() {
+		Command ce = new Command();
+		ce.setVin(this.getVin());
+		ce.setName(this.getName());
+		ce.setCommandAttribute(this.getAttributes());
+		ce.setTimestamp(this.getTimestamp());
+		ce.setCommandId(this.getId());
+		
+		return ce;
+	}
 }
