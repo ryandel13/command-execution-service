@@ -74,12 +74,12 @@
 		<dependency>
 			<groupId>net.mkengineering.studies.cms</groupId>
 			<artifactId>communication-message-service-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>net.mkengineering.studies.ui</groupId>
 			<artifactId>ui-service-api</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<version>0.0.14</version>
 		</dependency>
 	</dependencies>
 
