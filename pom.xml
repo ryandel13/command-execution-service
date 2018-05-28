@@ -7,6 +7,12 @@
 	<packaging>pom</packaging>
 	<name>command-execution-service</name>
 
+	<scm>
+	    <connection>scm:git:https://github.com/ryandel13/command-execution-service</connection>
+	    <developerConnection>scm:git:https://github.com/ryandel13/command-execution-service</developerConnection>
+	    <url>https://github.com/ryandel13/command-execution-service</url>
+	</scm>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -65,6 +71,20 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<distributionManagement>
+	    <repository>
+		    <uniqueVersion>false</uniqueVersion>
+		<id>nexus2</id>
+		<url>http://jupiter:8081/nexus/content/repositories/releases/</url>
+	    </repository>
+		
+		<snapshotRepository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>snapshot</id>
+			<url>http://jupiter:8081/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
 	<build>
 		<plugins>
 			<plugin>
