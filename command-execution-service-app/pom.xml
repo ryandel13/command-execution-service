@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>net.mk-engineering.studies.ces</groupId>
 	<artifactId>command-execution-service-app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>command-execution-service-app</name>
 	<description>Command Execution Service</description>
 
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.7.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<groupId>net.mkengineering.studies.ces</groupId>
+		<artifactId>command-execution-service</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+		<!-- <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-parent</artifactId> 
+			<version>1.5.7.RELEASE</version> <relativePath /> - lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -74,12 +75,12 @@
 		<dependency>
 			<groupId>net.mkengineering.studies.cms</groupId>
 			<artifactId>communication-message-service-api</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>net.mkengineering.studies.ui</groupId>
 			<artifactId>ui-service-api</artifactId>
-			<version>0.0.14</version>
+			<version>0.0.15-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
@@ -96,19 +97,19 @@
 	</dependencyManagement>
 
 	<distributionManagement>
-	    <repository>
-		    <uniqueVersion>false</uniqueVersion>
-		<id>nexus2</id>
-		<url>http://jupiter:8081/nexus/content/repositories/releases/</url>
-	    </repository>
-		
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>nexus2</id>
+			<url>http://jupiter:8081/nexus/content/repositories/releases/</url>
+		</repository>
+
 		<snapshotRepository>
 			<uniqueVersion>false</uniqueVersion>
 			<id>snapshot</id>
 			<url>http://jupiter:8081/nexus/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -120,7 +121,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>3.0.0</version>
 				<configuration>
-					<sourcepath>main/java</sourcepath>
+					<sourcepath>main/java;test/java</sourcepath>
 				</configuration>
 				<executions>
 					<execution>
@@ -131,6 +132,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			
 		</plugins>
 	</build>
 
