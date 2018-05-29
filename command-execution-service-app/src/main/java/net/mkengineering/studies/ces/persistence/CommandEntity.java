@@ -20,6 +20,8 @@ public class CommandEntity {
 	
 	private CommandState state;
 	
+	private int retries = 0;
+	
 	public CommandEntity() {
 		id = UUID.randomUUID().toString();
 	}
@@ -43,7 +45,22 @@ public class CommandEntity {
 		ce.setCommandAttribute(this.getAttributes());
 		ce.setTimestamp(this.getTimestamp());
 		ce.setCommandId(this.getId());
-		
+		ce.setState(this.getState().toString());
 		return ce;
+	}
+	
+	public void increaseRetry() {
+		retries++;
+		if(retries > 5) {
+			state = CommandState.FAILED;
+		}
+	}
+	
+	public void setState(CommandState state) {
+		if(this.state == CommandState.FAILED) return;
+		if(this.state == CommandState.FINALIZED) return;
+		if(this.state == CommandState.TERMINATED) return;
+		if(this.state == CommandState.OUTDATED) return;
+		this.state = state;
 	}
 }

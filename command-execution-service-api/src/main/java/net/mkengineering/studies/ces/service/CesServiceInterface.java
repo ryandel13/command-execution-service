@@ -32,6 +32,6 @@ public final String CONTEXT = "command";
 	
 	@RequestMapping(value = CONTEXT + "/{vin}/", method = RequestMethod.PUT)
 	@ResponseBody
-	public String putCommand(@PathVariable("vin") String vin, @RequestBody Command command) throws Exception;
+	public ResponseEntity<Boolean> putCommand(@PathVariable("vin") String vin, @RequestBody Command command) throws Exception;
 	
 }

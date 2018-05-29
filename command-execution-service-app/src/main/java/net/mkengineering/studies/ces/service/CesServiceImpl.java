@@ -22,23 +22,36 @@ public class CesServiceImpl implements CesServiceInterface {
 
 	@Autowired
 	private CommandRepository commandRepo;
-	
+
 	@Override
 	public ResponseEntity<DataResponse> getAllCommands(@PathVariable String vin) {
+		HttpStatus out = HttpStatus.NOT_FOUND;
 		List<CommandEntity> ces = commandRepo.getAllCommands(vin);
-		DataResponse dr = new DataResponse();
-		List<Command> commands = new ArrayList<Command>();
-		for(CommandEntity ce : ces) {
-			commands.add(ce.toCommand());
+		DataResponse dr = null;
+		if (ces != null) {
+			dr = new DataResponse();
+			out = HttpStatus.OK;
+			List<Command> commands = new ArrayList<Command>();
+			for (CommandEntity ce : ces) {
+				commands.add(ce.toCommand());
+			}
+			dr.setValues(commands);
 		}
-		dr.setValues(commands);
-		return new ResponseEntity<DataResponse>(dr, HttpStatus.OK);
+		return new ResponseEntity<DataResponse>(dr, out);
 	}
 
 	@Override
 	public ResponseEntity<DataResponse> getPendingCommands(@PathVariable String vin) {
-		List<CommandEntity> ce = commandRepo.getPendingCommands(vin);
-		return null;
+		HttpStatus out = HttpStatus.NOT_FOUND;
+		List<CommandEntity> ces = commandRepo.getPendingCommands(vin);
+		DataResponse dr = new DataResponse();
+		List<Command> commands = new ArrayList<>();
+		for(CommandEntity cE : ces) {
+			commands.add(cE.toCommand());
+		}
+		dr.setValues(commands);
+		out = HttpStatus.OK;
+		return new ResponseEntity<DataResponse>(dr, out);
 	}
 
 	@Override
@@ -48,13 +61,18 @@ public class CesServiceImpl implements CesServiceInterface {
 	}
 
 	@Override
-	public String putCommand(@PathVariable String vin, @RequestBody Command command) throws Exception {
+	public ResponseEntity<Boolean> putCommand(@PathVariable String vin, @RequestBody Command command) throws Exception {
 		log.info("New command: " + command.getName() + " for " + vin);
-		return commandRepo.putCommand(vin, command);
+		HttpStatus out = HttpStatus.BAD_REQUEST;
+		if(commandRepo.putCommand(vin, command) != null) {
+			out = HttpStatus.OK;
+		}
+		return new ResponseEntity<Boolean>(out);
 	}
 
 	@Override
-	public ResponseEntity<Boolean> updateCommandState(@PathVariable String vin,@PathVariable String commandid, @RequestBody String status) {
+	public ResponseEntity<Boolean> updateCommandState(@PathVariable String vin, @PathVariable String commandid,
+			@RequestBody String status) {
 		// TODO Auto-generated method stub
 		return null;
 	}

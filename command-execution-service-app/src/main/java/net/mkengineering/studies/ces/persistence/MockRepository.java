@@ -20,9 +20,9 @@ import net.mkengineering.studies.cms.Message;
 public class MockRepository implements CommandRepository {
 
 	@Autowired
-	CommunicationServiceFeign cmsInterface;
+	private CommunicationServiceFeign cmsInterface;
 	
-	Map<String, Map<Long, CommandEntity>> repository = new HashMap<>();
+	private Map<String, Map<Long, CommandEntity>> repository = new HashMap<>();
 	
 	@Override
 	public List<CommandEntity> getAllCommands(String vin) {

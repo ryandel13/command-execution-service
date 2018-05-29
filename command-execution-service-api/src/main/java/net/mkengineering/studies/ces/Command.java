@@ -16,4 +16,6 @@ public class Command {
 	private Long timestamp;
 	
 	private String commandAttribute;
+	
+	private String state;
 }

@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
 import net.mkengineering.studies.ces.Command;
 import net.mkengineering.studies.ces.exceptions.CommandToOldException;
 import net.mkengineering.studies.ces.feign.UiFeign;
@@ -19,9 +20,10 @@ import net.mkengineering.studies.cms.Message;
 
 @Component
 @ConditionalOnProperty(name = "execution.location", havingValue = "local")
+@Slf4j
 public class LocalCommandProcessor implements CommandRepository {
 
-	Map<String, Map<Long, CommandEntity>> repository = new HashMap<>();
+	private Map<String, Map<Long, CommandEntity>> repository = new HashMap<>();
 
 	@Autowired
 	private UiFeign uiFeign;
@@ -77,16 +79,11 @@ public class LocalCommandProcessor implements CommandRepository {
 		}
 
 		repository.get(vin).put(ce.getTimestamp(), ce);
-
-		Message msg = new Message();
-		msg.setVin(vin);
-		msg.setTimestamp(ce.getTimestamp());
-		msg.setContent(command.getName() + "|" + command.getUser() + "|" + command.getCommandId());
-
+		
 		return ce.getId();
 	}
 
-	@Scheduled(fixedRate = 1)
+	@Scheduled(fixedRate = 1000)
 	private void executePendingCommands() {
 		Map<Long, CommandEntity> commands = repository.get("WP0ZZZ94427");
 		if (commands == null)
@@ -94,11 +91,18 @@ public class LocalCommandProcessor implements CommandRepository {
 
 		for (Entry<Long, CommandEntity> e : commands.entrySet()) {
 			if (e.getValue().getState() == CommandState.INITIALIZED) {
-				net.mkengineering.studies.ui.Message m = new net.mkengineering.studies.ui.Message();
-				m.setType("lang.java.string");
-				m.SetMessage(e.getValue().getName(), "USER", e.getValue().getAttributes());
-				uiFeign.pushMessage(m);
-				e.getValue().setState(CommandState.FINALIZED);
+				e.getValue().setState(CommandState.EXECUTING);
+				e.getValue().increaseRetry();
+				try {
+					net.mkengineering.studies.ui.Message m = new net.mkengineering.studies.ui.Message();
+					m.setType("lang.java.string");
+					m.SetMessage(e.getValue().getName(), e.getValue().getId(), e.getValue().getAttributes());
+					uiFeign.pushMessage(m);
+					e.getValue().setState(CommandState.FINALIZED);
+				} catch(Exception ex) {
+					log.error(ex.getMessage());
+					e.getValue().setState(CommandState.INITIALIZED);
+				}
 			}
 		}
 	}
